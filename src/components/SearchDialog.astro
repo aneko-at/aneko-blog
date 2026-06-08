@@ -128,12 +128,11 @@
 
   function openSearch() {
     // Close mobile menu if open
-    const mobileMenu = document.getElementById('mobile-menu');
-    const mobileMenuBtn = document.getElementById('mobile-menu-btn');
-    if (mobileMenu && mobileMenu.classList.contains('is-open')) {
-      mobileMenu.classList.remove('is-open');
-      mobileMenu.setAttribute('aria-hidden', 'true');
-      mobileMenuBtn?.classList.remove('is-active');
+    const mobileMenuOverlay = document.getElementById('mobile-menu-overlay');
+    if (mobileMenuOverlay && mobileMenuOverlay.classList.contains('is-open')) {
+      mobileMenuOverlay.classList.remove('is-open');
+      mobileMenuOverlay.setAttribute('aria-hidden', 'true');
+      document.body.style.overflow = '';
     }
 
     const dialog = document.getElementById('search-dialog');

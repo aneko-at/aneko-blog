@@ -43,15 +43,18 @@ const navLinks = [
     </div>
 
     <!-- Mobile Menu Button -->
-    <button id="mobile-menu-btn" class="md:hidden text-text hover:text-accent-gold transition-colors">
-      <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
-      </svg>
-    </button>
-  </nav>
+  <button id="mobile-menu-btn" class="md:hidden text-text hover:text-accent-gold transition-colors">
+    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+    </svg>
+  </button>
+</nav>
+</header>
 
-  <!-- Mobile Menu -->
-  <div id="mobile-menu" class="mobile-menu md:hidden bg-primary border-t border-accent-gold/20" aria-hidden="true">
+<!-- Mobile Menu Overlay -->
+<div id="mobile-menu-overlay" class="mobile-menu-overlay md:hidden" aria-hidden="true">
+  <div class="mobile-menu-backdrop"></div>
+  <div id="mobile-menu" class="mobile-menu bg-primary border-t border-accent-gold/20">
     <ul class="container mx-auto px-4 py-4 space-y-4">
       {navLinks.map(({ href, label }, index) => (
         <li class="mobile-menu-item" style={`--item-index: ${index}`}>
@@ -70,7 +73,7 @@ const navLinks = [
       </li>
     </ul>
   </div>
-</header>
+</div>
 
 <style>
   .logo-link {
@@ -101,20 +104,46 @@ const navLinks = [
     margin: 0 0.4rem;
   }
 
+  /* Mobile Menu Overlay */
+  .mobile-menu-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+    display: flex;
+    flex-direction: column;
+    pointer-events: none;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease, visibility 0.3s ease;
+  }
+
+  .mobile-menu-overlay.is-open {
+    pointer-events: auto;
+    opacity: 1;
+    visibility: visible;
+  }
+
+  .mobile-menu-backdrop {
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(4px);
+  }
+
   /* Mobile Menu Animation */
   .mobile-menu {
+    position: relative;
+    margin-top: auto;
     max-height: 0;
     overflow: hidden;
     opacity: 0;
     transition: max-height 0.4s cubic-bezier(0.16, 1, 0.3, 1), 
                 opacity 0.3s ease;
-    visibility: hidden;
   }
 
-  .mobile-menu.is-open {
+  .mobile-menu-overlay.is-open .mobile-menu {
     max-height: 500px;
     opacity: 1;
-    visibility: visible;
   }
 
   .mobile-menu-item {
@@ -124,7 +153,7 @@ const navLinks = [
     transition-delay: calc(var(--item-index) * 0.05s);
   }
 
-  .mobile-menu.is-open .mobile-menu-item {
+  .mobile-menu-overlay.is-open .mobile-menu-item {
     opacity: 1;
     transform: translateY(0);
   }
@@ -133,18 +162,44 @@ const navLinks = [
 <script>
   function initMobileMenu() {
     const menuBtn = document.getElementById('mobile-menu-btn');
-    const mobileMenu = document.getElementById('mobile-menu');
+    const overlay = document.getElementById('mobile-menu-overlay');
+    const backdrop = overlay?.querySelector('.mobile-menu-backdrop');
 
-    if (menuBtn && mobileMenu) {
-      // Clone to remove old listeners
-      const newBtn = menuBtn.cloneNode(true) as HTMLElement;
-      menuBtn.parentNode?.replaceChild(newBtn, menuBtn);
-      
-      newBtn.addEventListener('click', () => {
-        const isOpen = mobileMenu.classList.toggle('is-open');
-        mobileMenu.setAttribute('aria-hidden', String(!isOpen));
-      });
+    if (!menuBtn || !overlay) return;
+
+    // Clone to remove old listeners
+    const newBtn = menuBtn.cloneNode(true) as HTMLElement;
+    menuBtn.parentNode?.replaceChild(newBtn, menuBtn);
+
+    function openMenu() {
+      overlay.classList.add('is-open');
+      overlay.setAttribute('aria-hidden', 'false');
+      document.body.style.overflow = 'hidden';
     }
+
+    function closeMenu() {
+      overlay.classList.remove('is-open');
+      overlay.setAttribute('aria-hidden', 'true');
+      document.body.style.overflow = '';
+    }
+
+    newBtn.addEventListener('click', () => {
+      if (overlay.classList.contains('is-open')) {
+        closeMenu();
+      } else {
+        openMenu();
+      }
+    });
+
+    // Close on backdrop click
+    backdrop?.addEventListener('click', closeMenu);
+
+    // Close on ESC key
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && overlay.classList.contains('is-open')) {
+        closeMenu();
+      }
+    });
   }
 
   initMobileMenu();
