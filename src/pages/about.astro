@@ -1,0 +1,131 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+
+const values = [
+  {
+    title: '热爱编码',
+    desc: '编程本身就是乐趣，用代码解决问题的过程比结果更有吸引力。',
+    svg: '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M17.25 6.75L22.5 12l-5.25 5.25m-10.5 0L1.5 12l5.25-5.25m7.5-3l-4.5 16.5" />',
+  },
+  {
+    title: '保持好奇',
+    desc: '对新技术、新工具保持开放态度，永远有学不完的东西。',
+    svg: '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 18v-5.25m0 0a6.01 6.01 0 001.5-.189m-1.5.189a6.01 6.01 0 01-1.5-.189m3.75 7.478a12.06 12.06 0 01-4.5 0m3.75 2.383a14.406 14.406 0 01-3 0M14.25 18v-.192c0-.983.658-1.823 1.508-2.316a7.5 7.5 0 10-7.517 0c.85.493 1.509 1.333 1.509 2.316V18" />',
+  },
+  {
+    title: '动手实践',
+    desc: '文档读百遍不如写一遍。遇到问题，先跑起来再说。',
+    svg: '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M11.42 15.17L17.25 21A2.652 2.652 0 0021 17.25l-5.877-5.877M11.42 15.17l2.496-3.03c.317-.384.74-.626 1.208-.766M11.42 15.17l-4.655 5.653a2.548 2.548 0 11-3.586-3.586l6.837-5.63m5.108-.233c.55-.164 1.163-.188 1.743-.14a4.5 4.5 0 004.486-6.336l-3.276 3.277a3.004 3.004 0 01-2.25-2.25l3.276-3.276a4.5 4.5 0 00-6.336 4.486c.091 1.076-.071 2.264-.904 2.95l-.102.085m-1.745 1.437L5.909 7.5H4.5L2.25 3.75l1.5-1.5L7.5 4.5v1.409l4.26 4.26m-1.745 1.437l1.745-1.437m6.615 8.206L15.75 15.75M4.867 19.125h.008v.008h-.008v-.008z" />',
+  },
+];
+
+const contacts = [
+  { label: 'GitHub', value: 'github.com/atbspb', href: 'https://github.com/atbspb', svg: '<path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z" />' },
+  { label: '邮箱', value: 'atbspb@qq.com', href: 'mailto:atbspb@qq.com', svg: '<path d="M1.5 8.67v8.58a3 3 0 003 3h15a3 3 0 003-3V8.67l-8.928 5.493a3 3 0 01-3.144 0L1.5 8.67z M22.5 6.908V6.75a3 3 0 00-3-3h-15a3 3 0 00-3 3v.158l9.714 5.978a1.5 1.5 0 001.572 0L22.5 6.908z" />' },
+  { label: 'B站', value: 'space.bilibili.com', href: 'https://space.bilibili.com/3493117248407854', svg: '<path d="M17.813 4.653h.854c1.51.054 2.769.578 3.773 1.574 1.004.995 1.524 2.249 1.56 3.76v7.36c-.036 1.51-.556 2.769-1.56 3.773s-2.262 1.524-3.773 1.56H5.333c-1.51-.036-2.769-.556-3.773-1.56S.036 18.858 0 17.347v-7.36c.036-1.511.556-2.765 1.56-3.76 1.004-.996 2.262-1.52 3.773-1.574h.774l-1.174-1.12a1.234 1.234 0 0 1-.373-.906c0-.356.124-.658.373-.907l.027-.027c.267-.249.573-.373.92-.373.347 0 .653.124.92.373L9.653 4.44c.071.071.134.142.187.213h4.267a.836.836 0 0 1 .16-.213l2.853-2.747c.267-.249.573-.373.92-.373.347 0 .662.151.929.4.267.249.391.551.391.907 0 .355-.124.657-.373.906zM5.333 7.24c-.746.018-1.373.276-1.88.773-.506.498-.769 1.13-.786 1.894v7.52c.017.764.28 1.395.786 1.893.507.498 1.134.756 1.88.773h13.334c.746-.017 1.373-.275 1.88-.773.506-.498.769-1.129.786-1.893v-7.52c-.017-.765-.28-1.396-.786-1.894-.507-.497-1.134-.755-1.88-.773zM8 11.107c.373 0 .684.124.933.373.25.249.383.569.4.96v1.173c-.017.391-.15.711-.4.96-.249.25-.56.374-.933.374s-.684-.125-.933-.374c-.25-.249-.383-.569-.4-.96V12.44c0-.373.129-.689.386-.947.258-.257.574-.386.947-.386zm8 0c.373 0 .684.124.933.373.25.249.383.569.4.96v1.173c-.017.391-.15.711-.4.96-.249.25-.56.374-.933.374s-.684-.125-.933-.374c-.25-.249-.383-.569-.4-.96V12.44c.017-.391.15-.711.4-.96.249-.249.56-.373.933-.373z" />' },
+  { label: '抖音', value: '抖音号：ATBSPB', href: 'https://www.douyin.com/user/MS4wLjABAAAA7NE44caXVSpyPc_MQDF3zD95cma4xvldNiPdPmKDALoVNOc1PmpdNwViMOeVoM_4?previous_page=web_code_link', svg: '<path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-1.43.08-2.86-.31-4.08-1.03-2.02-1.19-3.44-3.37-3.65-5.71-.02-.5-.03-1-.01-1.49.18-1.9 1.12-3.72 2.58-4.96 1.66-1.44 3.98-2.13 6.15-1.72.02 1.48-.04 2.96-.04 4.44-.99-.32-2.15-.23-3.02.37-.63.41-1.11 1.04-1.36 1.75-.21.51-.15 1.07-.14 1.61.24 1.64 1.82 3.02 3.5 2.87 1.12-.01 2.19-.66 2.77-1.61.19-.33.4-.67.41-1.06.1-1.79.06-3.57.07-5.36.01-4.03-.01-8.05.02-12.07z" />' },
+];
+---
+
+<BaseLayout title="关于 - ATBSPB">
+  <Header />
+
+  <!-- Page Header -->
+  <section class="pt-32 pb-16 bg-primary">
+    <div class="container mx-auto px-4">
+      <div class="text-center reveal">
+        <p class="section-subtitle">About</p>
+        <h1 class="text-5xl md:text-6xl font-heading font-bold text-text mb-4">关于我</h1>
+        <div class="divider-animated mx-auto"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Brand Story -->
+  <section class="py-20 bg-secondary">
+    <div class="container mx-auto px-4">
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+        <div class="reveal-left">
+        <h2 class="section-title">简介</h2>
+        <p class="section-subtitle">about</p>
+          <div class="divider-animated mb-8"></div>
+          <p class="text-text-muted leading-relaxed mb-6">
+            我是 ATBSPB，独立开发者，喜欢折腾各种技术项目。
+          </p>
+          <p class="text-text-muted leading-relaxed mb-6">
+            这个博客是我记录开发经验和技术笔记的地方。
+          </p>
+          <p class="text-text-muted leading-relaxed">
+            内容涵盖项目实践、技术探索和工具推荐。
+          </p>
+        </div>
+
+        <div class="reveal-right reveal-delay-2">
+          <div class="relative">
+            <div class="absolute -top-4 -left-4 w-24 h-24 border-t-2 border-l-2 border-accent-gold"></div>
+            <div class="absolute -bottom-4 -right-4 w-24 h-24 border-b-2 border-r-2 border-accent-gold"></div>
+            <div class="img-hover-zoom">
+              <img
+                src="/images/A2.jpg"
+                alt="ATBSPB"
+                class="w-full h-auto object-cover"
+                loading="lazy"
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Values -->
+  <section class="py-20 bg-primary">
+    <div class="container mx-auto px-4">
+      <div class="text-center mb-16 reveal">
+        <h2 class="section-title">理念</h2>
+        <p class="section-subtitle">values</p>
+        <div class="divider-animated mx-auto"></div>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+        {values.map(({ svg, title, desc }, i) => (
+          <div class={`card card-border-animated p-8 text-center reveal reveal-delay-${i + 1}`}>
+            <div class="w-14 h-14 mx-auto mb-6 rounded-xl bg-accent-gold/10 border border-accent-gold/20 flex items-center justify-center">
+              <svg xmlns="http://www.w3.org/2000/svg" class="w-7 h-7 text-accent-gold" fill="none" viewBox="0 0 24 24" stroke="currentColor" set:html={svg} />
+            </div>
+            <h3 class="text-xl font-heading font-semibold text-text mb-4">{title}</h3>
+            <p class="text-text-muted leading-relaxed">{desc}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- Contact -->
+  <section class="py-20 bg-secondary">
+    <div class="container mx-auto px-4">
+      <div class="max-w-2xl mx-auto text-center reveal-scale">
+        <h2 class="section-title">联系我</h2>
+        <p class="section-subtitle">contact</p>
+        <div class="divider-animated mx-auto mb-8"></div>
+        <p class="text-text-muted mb-8">
+          如有问题或合作意向，欢迎通过以下方式联系。
+        </p>
+        <div class="flex flex-wrap justify-center gap-10">
+          {contacts.map(({ label, value, href, svg }, i) => (
+            <a href={href} target="_blank" rel="noopener noreferrer" class={`group flex flex-col items-center gap-3 reveal reveal-delay-${i + 1}`}>
+              <div class="w-12 h-12 rounded-xl bg-accent-gold/10 flex items-center justify-center group-hover:bg-accent-gold/20 group-hover:scale-110 transition-all duration-300">
+                <svg class="w-5 h-5 text-accent-gold" fill="currentColor" viewBox="0 0 24 24" set:html={svg} />
+              </div>
+              <p class="text-sm font-bold text-text uppercase tracking-wider group-hover:text-accent-gold transition-colors">{label}</p>
+            </a>
+          ))}
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <Footer />
+</BaseLayout>

@@ -1,0 +1,120 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Header from '../../components/Header.astro';
+import Footer from '../../components/Footer.astro';
+import ArticleCard from '../../components/ArticleCard.astro';
+import Sidebar from '../../components/Sidebar.astro';
+import { getPublishedPosts } from '../../utils/posts';
+
+const allPosts = await getPublishedPosts();
+---
+
+<BaseLayout title="文章 - ATBSPB | Blog">
+  <Header />
+
+  <!-- Blog Header -->
+  <section class="pt-32 pb-16 bg-primary">
+    <div class="container mx-auto px-4">
+      <div class="max-w-6xl mx-auto">
+        <div class="flex items-center justify-between">
+          <div class="reveal">
+            <p class="section-subtitle">Blog</p>
+            <h1 class="section-title">文章列表</h1>
+            <div class="divider-animated mb-4"></div>
+            <p id="tag-filter-info" class="text-text-muted hidden">
+              标签：<span id="tag-filter-name" class="text-accent-gold"></span>
+              <a href="/blog" class="ml-3 text-sm text-text-muted hover:text-accent-gold transition-colors">清除筛选</a>
+            </p>
+          </div>
+          <button
+            data-search-trigger
+            class="hidden md:flex items-center gap-2 px-4 py-2.5 bg-secondary border border-text-muted/20 hover:border-accent-gold/50 text-text-muted hover:text-accent-gold transition-all duration-300 cursor-pointer"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+            </svg>
+            <span class="text-sm">搜索文章</span>
+            <kbd class="text-xs text-text-muted/30 border border-text-muted/20 px-1.5 py-0.5 ml-2">⌘K</kbd>
+          </button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Blog Content -->
+  <section class="py-12 bg-secondary">
+    <div class="container mx-auto px-4">
+      <div class="max-w-6xl mx-auto flex flex-col lg:flex-row gap-8">
+        <!-- Main Content -->
+        <div class="flex-1">
+          <div id="posts-grid" class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {allPosts.map((post, i) => (
+              <div class={`reveal reveal-delay-${Math.min(i + 1, 4)}`} data-tags={JSON.stringify(post.data.tags)}>
+                <ArticleCard
+                  title={post.data.title}
+                  description={post.data.description}
+                  pubDate={post.data.pubDate.toISOString().split('T')[0]}
+                  slug={post.id}
+                  heroImage={post.data.heroImage}
+                  tags={post.data.tags}
+                />
+              </div>
+            ))}
+          </div>
+
+          <div id="no-posts" class="text-center py-20 hidden">
+            <p class="text-text-muted text-lg">暂无匹配的文章</p>
+          </div>
+        </div>
+
+        <!-- Sidebar -->
+        <Sidebar />
+      </div>
+    </div>
+  </section>
+
+  <Footer />
+</BaseLayout>
+
+<script>
+  function filterByTag() {
+    const params = new URLSearchParams(window.location.search);
+    const tag = params.get('tag') || '';
+    const grid = document.getElementById('posts-grid');
+    const noPosts = document.getElementById('no-posts');
+    const tagInfo = document.getElementById('tag-filter-info');
+    const tagName = document.getElementById('tag-filter-name');
+
+    if (!grid) return;
+
+    const items = grid.querySelectorAll('[data-tags]');
+    let visibleCount = 0;
+
+    items.forEach((item) => {
+      const el = item as HTMLElement;
+      const tags = JSON.parse(el.dataset.tags || '[]');
+      if (!tag || tags.includes(tag)) {
+        el.style.display = '';
+        visibleCount++;
+      } else {
+        el.style.display = 'none';
+      }
+    });
+
+    if (tagInfo && tagName) {
+      if (tag) {
+        tagInfo.classList.remove('hidden');
+        tagName.textContent = `#${tag}`;
+      } else {
+        tagInfo.classList.add('hidden');
+      }
+    }
+
+    if (noPosts) {
+      noPosts.classList.toggle('hidden', visibleCount > 0);
+    }
+  }
+
+  filterByTag();
+  document.addEventListener('astro:page-load', filterByTag);
+</script>

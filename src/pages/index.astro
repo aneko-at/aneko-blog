@@ -1,0 +1,94 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import HeroCarousel from '../components/HeroCarousel.astro';
+import ArticleCard from '../components/ArticleCard.astro';
+import { getPublishedPosts } from '../utils/posts';
+
+const featuredArticles = (await getPublishedPosts())
+  .slice(0, 3)
+  .map(post => ({
+    title: post.data.title,
+    description: post.data.description,
+    pubDate: post.data.pubDate.toISOString().split('T')[0],
+    slug: post.id,
+    heroImage: post.data.heroImage,
+    tags: post.data.tags,
+  }));
+
+---
+
+<BaseLayout title="ATBSPB | Blog">
+  <Header />
+
+  <!-- Hero -->
+  <HeroCarousel />
+
+  <!-- Featured Articles -->
+  <section class="py-20 bg-secondary">
+    <div class="container mx-auto px-4">
+      <div class="text-center mb-16 reveal">
+        <p class="section-subtitle">精选内容</p>
+        <h2 class="section-title">Featured Articles</h2>
+        <div class="divider-animated mx-auto"></div>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        {featuredArticles.map((article, i) => (
+          <div class={`reveal reveal-delay-${i + 1}`}>
+            <ArticleCard {...article} />
+          </div>
+        ))}
+      </div>
+
+      <div class="text-center mt-12 reveal">
+        <a href="/blog" class="btn btn-glow magnetic inline-flex items-center gap-2">
+          查看所有文章
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3" />
+          </svg>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Brand Story -->
+  <section class="py-20 bg-primary">
+    <div class="container mx-auto px-4">
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+        <div class="reveal-left">
+          <p class="section-subtitle">关于我</p>
+          <h2 class="section-title">About Me</h2>
+          <div class="divider-animated mb-8"></div>
+          <p class="text-text-muted leading-relaxed mb-6">
+            我是 ATBSPB，独立开发者，喜欢折腾各种技术项目。
+          </p>
+          <a href="/about" class="btn btn-glow magnetic inline-flex items-center gap-2">
+            了解更多
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3" />
+            </svg>
+          </a>
+        </div>
+
+        <div class="reveal-right reveal-delay-2">
+          <div class="relative">
+            <div class="absolute -top-4 -left-4 w-24 h-24 border-t-2 border-l-2 border-accent-gold"></div>
+            <div class="absolute -bottom-4 -right-4 w-24 h-24 border-b-2 border-r-2 border-accent-gold"></div>
+            <div class="img-hover-zoom">
+              <img
+                src="/images/A1.jpg"
+                alt="Brand Story"
+                class="w-full h-auto object-cover"
+                loading="lazy"
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <Footer />
+</BaseLayout>

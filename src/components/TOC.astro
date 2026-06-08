@@ -1,0 +1,75 @@
+---
+interface Props {
+  headings: { depth: number; slug: string; text: string }[];
+}
+
+const { headings } = Astro.props;
+const filteredHeadings = headings.filter(h => h.depth >= 2 && h.depth <= 3);
+---
+
+{filteredHeadings.length > 0 && (
+  <nav class="toc-container">
+    <h3 class="font-heading font-semibold text-text mb-4 flex items-center gap-2 text-sm">
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-accent-gold" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h7" />
+      </svg>
+      目录
+    </h3>
+    <ul class="space-y-1.5 toc-list">
+      {filteredHeadings.map(heading => (
+        <li class:list={[heading.depth === 3 && 'ml-4']}>
+          <a
+            href={`#${heading.slug}`}
+            class:list={[
+              'toc-link block text-sm leading-relaxed py-1 border-l-2 transition-all duration-300',
+              heading.depth === 2 ? 'pl-3' : 'pl-3',
+            ]}
+            data-target={heading.slug}
+          >
+            {heading.text}
+          </a>
+        </li>
+      ))}
+    </ul>
+  </nav>
+)}
+
+<script>
+  function initTOC() {
+    const tocLinks = document.querySelectorAll('.toc-link');
+    if (tocLinks.length === 0) return;
+
+    const headings: { el: HTMLElement; link: Element }[] = [];
+    tocLinks.forEach(link => {
+      const target = link.getAttribute('data-target');
+      if (target) {
+        const el = document.getElementById(target);
+        if (el) headings.push({ el, link });
+      }
+    });
+
+    if (headings.length === 0) return;
+
+    function updateActive() {
+      let current = headings[0];
+      for (const h of headings) {
+        if (h.el.getBoundingClientRect().top <= 120) {
+          current = h;
+        }
+      }
+
+      tocLinks.forEach(link => {
+        link.classList.remove('toc-active');
+      });
+      if (current) {
+        current.link.classList.add('toc-active');
+      }
+    }
+
+    window.addEventListener('scroll', updateActive, { passive: true });
+    updateActive();
+  }
+
+  document.addEventListener('DOMContentLoaded', initTOC);
+  document.addEventListener('astro:page-load', initTOC);
+</script>

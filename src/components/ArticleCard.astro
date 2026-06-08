@@ -1,0 +1,69 @@
+---
+interface Props {
+  title: string;
+  description: string;
+  pubDate: string;
+  slug: string;
+  heroImage?: string;
+  tags?: string[];
+}
+
+const { title, description, pubDate, slug, heroImage, tags = [] } = Astro.props;
+
+const formattedDate = new Date(pubDate).toLocaleDateString('zh-CN', {
+  year: 'numeric',
+  month: 'long',
+  day: 'numeric',
+});
+---
+
+<article class="card group overflow-hidden" transition:name={`card-${slug}`}>
+  {heroImage && (
+    <div class="img-hover-zoom aspect-video overflow-hidden">
+      <img
+        src={heroImage}
+        alt={title}
+        class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+        loading="lazy"
+        transition:name={`hero-${slug}`}
+      />
+    </div>
+  )}
+
+  <div class="p-6">
+    <!-- Date -->
+    <div class="flex items-center mb-4">
+      <time class="text-xs font-body text-text-muted" datetime={pubDate}>{formattedDate}</time>
+    </div>
+
+    <!-- Title -->
+    <h3 class="text-xl font-heading font-semibold text-text mb-3 group-hover:text-accent-gold transition-colors duration-300">
+      <a href={`/blog/${slug}`} transition:name={`title-${slug}`}>{title}</a>
+    </h3>
+
+    <!-- Description -->
+    <p class="text-sm font-body text-text-muted leading-relaxed mb-4 line-clamp-3">{description}</p>
+
+    <!-- Tags -->
+    {tags.length > 0 && (
+      <div class="flex flex-wrap gap-2 mb-4">
+        {tags.map((tag) => (
+          <a
+            href={`/blog?tag=${encodeURIComponent(tag)}`}
+            class="text-xs font-body text-text-muted border border-text-muted/30 px-2 py-1 hover:border-accent-gold hover:text-accent-gold transition-colors duration-300"
+          >
+            {tag}
+          </a>
+        ))}
+      </div>
+    )}
+
+    <!-- Read More -->
+    <a href={`/blog/${slug}`} class="inline-flex items-center text-sm font-body text-accent-gold hover:text-accent-red transition-colors duration-300">
+      阅读全文
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 ml-1 transform group-hover:translate-x-1 transition-transform duration-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3" />
+      </svg>
+    </a>
+  </div>
+</article>

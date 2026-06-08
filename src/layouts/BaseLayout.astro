@@ -1,0 +1,91 @@
+---
+import '../styles/global.css';
+import { ClientRouter } from 'astro:transitions';
+import SearchDialog from '../components/SearchDialog.astro';
+
+interface Props {
+  title: string;
+  description?: string;
+}
+
+const { title, description = 'ATBSPB 的个人博客，记录开发实践与技术笔记' } = Astro.props;
+---
+
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="description" content={description} />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" href="/favicon.ico" />
+    <meta name="generator" content={Astro.generator} />
+    <title>{title}</title>
+    <ClientRouter />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet" />
+  </head>
+  <body class="min-h-screen bg-primary text-text">
+    <!-- Page Loader -->
+    <div class="page-loader" id="page-loader">
+      <div class="loader-bg-lines">
+        <div class="loader-bg-line"></div>
+        <div class="loader-bg-line"></div>
+        <div class="loader-bg-line"></div>
+        <div class="loader-bg-line"></div>
+        <div class="loader-bg-line"></div>
+      </div>
+
+      <div class="loader-center">
+        <div class="loader-ring">
+          <svg viewBox="0 0 100 100" class="loader-ring-svg">
+            <circle cx="50" cy="50" r="45" fill="none" stroke="rgba(192,160,98,0.15)" stroke-width="0.5" />
+            <circle cx="50" cy="50" r="45" fill="none" stroke="url(#loader-gradient)" stroke-width="1"
+              stroke-dasharray="283" stroke-dashoffset="283" stroke-linecap="round" class="loader-ring-progress" />
+            <defs>
+              <linearGradient id="loader-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stop-color="#c0a062" />
+                <stop offset="100%" stop-color="#ffffff" />
+              </linearGradient>
+            </defs>
+          </svg>
+        </div>
+
+        <div class="loader-logo-wrapper">
+          <span class="loader-logo-text">At</span>
+          <span class="loader-logo-separator"> | </span>
+          <span class="loader-logo-text loader-logo-text-delay">Blog</span>
+        </div>
+
+        <p class="loader-tagline">DESIGN &middot; TECHNOLOGY &middot; LIFESTYLE</p>
+
+        <div class="loader-progress-track">
+          <div class="loader-progress-bar"></div>
+        </div>
+
+        <span class="loader-percent">0</span>
+      </div>
+
+      <div class="loader-bottom">
+        <div class="loader-bottom-line"></div>
+      </div>
+    </div>
+
+    <!-- Scroll Progress -->
+    <div class="scroll-progress"></div>
+
+    <slot />
+
+    <!-- Back to Top -->
+    <button class="back-to-top" aria-label="返回顶部">
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 10l7-7m0 0l7 7m-7-7v18" />
+      </svg>
+    </button>
+
+    <!-- Search Dialog -->
+    <SearchDialog />
+
+    <script src="/animations.js" is:inline></script>
+  </body>
+</html>

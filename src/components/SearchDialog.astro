@@ -1,0 +1,264 @@
+---
+// SearchDialog - client-side search using a JSON index
+---
+
+<div id="search-dialog" class="search-overlay" aria-hidden="true">
+  <!-- Backdrop -->
+  <div class="search-backdrop" id="search-backdrop"></div>
+
+  <!-- Dialog -->
+  <div class="search-dialog-container">
+    <div class="search-dialog-inner bg-secondary border border-text-muted/20 shadow-2xl">
+      <!-- Search Input -->
+      <div class="flex items-center gap-3 px-5 py-4 border-b border-text-muted/10">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-accent-gold flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+        </svg>
+        <input
+          type="text"
+          id="search-input"
+          placeholder="搜索文章..."
+          class="flex-1 bg-transparent text-text text-lg outline-none placeholder-text-muted"
+          autocomplete="off"
+        />
+        <kbd class="text-xs text-text-muted/50 border border-text-muted/20 px-2 py-0.5">ESC</kbd>
+      </div>
+
+      <!-- Results -->
+      <div id="search-results" class="max-h-[50vh] overflow-y-auto">
+        <div class="px-5 py-8 text-center text-text-muted text-sm" id="search-empty">
+          输入关键词开始搜索
+        </div>
+      </div>
+
+      <!-- Footer -->
+      <div class="px-5 py-3 border-t border-text-muted/10 flex items-center justify-between text-xs text-text-muted/50">
+        <span>客户端搜索 · 基于标题和描述匹配</span>
+        <div class="flex items-center gap-2">
+          <kbd class="border border-text-muted/20 px-1.5 py-0.5">↑↓</kbd>
+          <span>导航</span>
+          <kbd class="border border-text-muted/20 px-1.5 py-0.5">Enter</kbd>
+          <span>打开</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+  .search-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 99999;
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    pointer-events: none;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.2s ease, visibility 0.2s ease;
+  }
+  .search-overlay.active {
+    pointer-events: auto;
+    opacity: 1;
+    visibility: visible;
+  }
+  .search-backdrop {
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.7);
+    backdrop-filter: blur(4px);
+  }
+  .search-dialog-container {
+    position: relative;
+    width: 100%;
+    max-width: 42rem;
+    padding: 0 1rem;
+    margin-top: 15vh;
+    transform: translateY(-12px) scale(0.98);
+    opacity: 0;
+    transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.2s ease;
+  }
+  .search-overlay.active .search-dialog-container {
+    transform: translateY(0) scale(1);
+    opacity: 1;
+  }
+  .search-dialog-inner {
+    overflow: hidden;
+    border-radius: 0.5rem;
+  }
+</style>
+
+<script>
+  interface SearchItem {
+    title: string;
+    description: string;
+    slug: string;
+    tags: string[];
+    date: string;
+  }
+
+  let searchIndex: SearchItem[] = [];
+  let selectedIndex = -1;
+  let searchInitialized = false;
+
+  async function loadSearchIndex() {
+    try {
+      const res = await fetch('/api/search.json');
+      if (res.ok) searchIndex = await res.json();
+    } catch {
+      // ignore
+    }
+  }
+
+  function openSearch() {
+    const dialog = document.getElementById('search-dialog');
+    if (!dialog) return;
+    dialog.classList.add('active');
+    dialog.setAttribute('aria-hidden', 'false');
+    document.body.style.overflow = 'hidden';
+    const input = document.getElementById('search-input') as HTMLInputElement;
+    if (input) {
+      input.value = '';
+      setTimeout(() => input.focus(), 50);
+    }
+    showDefault();
+    selectedIndex = -1;
+  }
+
+  function closeSearch() {
+    const dialog = document.getElementById('search-dialog');
+    if (!dialog) return;
+    dialog.classList.remove('active');
+    dialog.setAttribute('aria-hidden', 'true');
+    document.body.style.overflow = '';
+  }
+
+  function showDefault() {
+    const container = document.getElementById('search-results');
+    if (!container) return;
+    container.innerHTML = '<div class="px-5 py-8 text-center text-text-muted text-sm">输入关键词开始搜索</div>';
+  }
+
+  function renderResults(items: SearchItem[]) {
+    const container = document.getElementById('search-results');
+    if (!container) return;
+
+    if (items.length === 0) {
+      container.innerHTML = '<div class="px-5 py-8 text-center text-text-muted text-sm">未找到相关文章</div>';
+      return;
+    }
+
+    container.innerHTML = items.map((item, i) => `
+      <a href="/blog/${item.slug}" class="search-result-item block px-5 py-3 hover:bg-accent-gold/5 border-b border-text-muted/5 transition-colors ${i === 0 ? 'bg-accent-gold/5' : ''}" data-index="${i}">
+        <div class="flex items-center gap-2 mb-1">
+          <span class="text-xs text-text-muted/50">${item.date}</span>
+        </div>
+        <h4 class="text-text font-medium">${item.title}</h4>
+        <p class="text-sm text-text-muted line-clamp-1 mt-0.5">${item.description}</p>
+      </a>
+    `).join('');
+    selectedIndex = 0;
+  }
+
+  function handleSearch(query: string) {
+    if (!query.trim()) {
+      showDefault();
+      return;
+    }
+    const q = query.toLowerCase();
+    const results = searchIndex.filter(item =>
+      item.title.toLowerCase().includes(q) ||
+      item.description.toLowerCase().includes(q) ||
+      item.tags.some(t => t.toLowerCase().includes(q))
+    );
+    renderResults(results);
+  }
+
+  function navigateResults(direction: 'up' | 'down') {
+    const items = document.querySelectorAll('.search-result-item');
+    if (items.length === 0) return;
+    items[selectedIndex]?.classList.remove('bg-accent-gold/5');
+    if (direction === 'down') {
+      selectedIndex = (selectedIndex + 1) % items.length;
+    } else {
+      selectedIndex = (selectedIndex - 1 + items.length) % items.length;
+    }
+    items[selectedIndex]?.classList.add('bg-accent-gold/5');
+    items[selectedIndex]?.scrollIntoView({ block: 'nearest' });
+  }
+
+  function selectResult() {
+    const items = document.querySelectorAll('.search-result-item');
+    const selected = items[selectedIndex] as HTMLAnchorElement;
+    if (selected?.href) {
+      closeSearch();
+      window.location.href = selected.href;
+    }
+  }
+
+  function initSearch() {
+    if (searchInitialized) return;
+    searchInitialized = true;
+
+    loadSearchIndex();
+
+    // Cmd/Ctrl + K
+    document.addEventListener('keydown', (e) => {
+      if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
+        e.preventDefault();
+        const dialog = document.getElementById('search-dialog');
+        if (dialog?.classList.contains('active')) {
+          closeSearch();
+        } else {
+          openSearch();
+        }
+      }
+      if (e.key === 'Escape') {
+        closeSearch();
+      }
+    });
+
+    // Trigger buttons
+    document.querySelectorAll('[data-search-trigger]').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        e.preventDefault();
+        openSearch();
+      });
+    });
+
+    // Backdrop click
+    document.getElementById('search-backdrop')?.addEventListener('click', closeSearch);
+
+    // Input
+    const input = document.getElementById('search-input') as HTMLInputElement;
+    if (input) {
+      input.addEventListener('input', (e) => {
+        handleSearch((e.target as HTMLInputElement).value);
+      });
+      input.addEventListener('keydown', (e) => {
+        if (e.key === 'ArrowDown') {
+          e.preventDefault();
+          navigateResults('down');
+        } else if (e.key === 'ArrowUp') {
+          e.preventDefault();
+          navigateResults('up');
+        } else if (e.key === 'Enter') {
+          e.preventDefault();
+          selectResult();
+        }
+      });
+    }
+  }
+
+  document.addEventListener('DOMContentLoaded', initSearch);
+  document.addEventListener('astro:page-load', () => {
+    // Re-bind trigger buttons after SPA navigation
+    document.querySelectorAll('[data-search-trigger]').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        e.preventDefault();
+        openSearch();
+      });
+    });
+  });
+</script>

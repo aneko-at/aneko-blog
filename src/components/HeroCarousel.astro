@@ -1,0 +1,152 @@
+---
+interface Slide {
+  id: number;
+  title: string;
+  subtitle: string;
+  description: string;
+  cta: string;
+  link: string;
+}
+
+const slides: Slide[] = [
+  {
+    id: 1,
+    title: '开发日志',
+    subtitle: 'ATBSPB',
+    description: '记录项目开发中的实践与思考。',
+    cta: '阅读文章',
+    link: '/blog',
+  },
+  {
+    id: 2,
+    title: '开源项目',
+    subtitle: 'OPEN SOURCE',
+    description: '将有价值的代码开源，与社区共享。',
+    cta: '了解更多',
+    link: '/about',
+  },
+  {
+    id: 3,
+    title: '技术笔记',
+    subtitle: 'NOTES',
+    description: '学习新知识，沉淀为文字。',
+    cta: '浏览博客',
+    link: '/blog',
+  },
+];
+---
+
+<section class="hero-carousel relative h-screen w-full overflow-hidden bg-primary">
+  <div class="absolute inset-0 bg-gradient-to-b from-primary via-primary/80 to-secondary"></div>
+  <div class="absolute top-1/2 left-0 w-full h-px bg-accent-gold/10 transform -translate-y-1/2"></div>
+  <div class="absolute top-0 left-1/2 w-px h-full bg-accent-gold/10 transform -translate-x-1/2"></div>
+
+  {slides.map((slide, index) => (
+    <div
+      class={`slide absolute inset-0 flex items-center transition-opacity duration-1000 ${index === 0 ? 'opacity-100' : 'opacity-0'}`}
+      data-index={index}
+    >
+      <div class="container mx-auto px-4">
+        <div class="max-w-4xl">
+          <p class="text-sm font-body text-accent-gold uppercase tracking-[0.3em] mb-4 slide-subtitle">
+            {slide.subtitle}
+          </p>
+          <h1 class="text-5xl md:text-7xl lg:text-8xl font-heading font-bold text-text mb-6 leading-tight slide-title">
+            {slide.title}
+          </h1>
+          <p class="text-lg md:text-xl text-text-muted mb-8 max-w-2xl leading-relaxed slide-description">
+            {slide.description}
+          </p>
+          <a href={slide.link} class="btn inline-flex items-center gap-2 slide-cta">
+            {slide.cta}
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3" />
+            </svg>
+          </a>
+        </div>
+      </div>
+    </div>
+  ))}
+
+  <!-- Indicators -->
+  <div class="absolute bottom-8 left-1/2 transform -translate-x-1/2 flex space-x-2">
+    {slides.map((_, index) => (
+      <button
+        class={`indicator w-12 h-1 transition-all duration-300 ${index === 0 ? 'bg-accent-gold' : 'bg-text-muted/30'}`}
+        data-index={index}
+      ></button>
+    ))}
+  </div>
+
+  <!-- Arrows -->
+  <button class="prev-btn absolute left-4 top-1/2 transform -translate-y-1/2 text-text-muted hover:text-accent-gold transition-colors p-2">
+    <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M15 19l-7-7 7-7" />
+    </svg>
+  </button>
+  <button class="next-btn absolute right-4 top-1/2 transform -translate-y-1/2 text-text-muted hover:text-accent-gold transition-colors p-2">
+    <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M9 5l7 7-7 7" />
+    </svg>
+  </button>
+
+  <!-- Scroll Indicator -->
+  <div class="absolute bottom-8 right-8 flex flex-col items-center scroll-indicator">
+    <span class="text-xs text-text-muted uppercase tracking-widest mb-2" style="writing-mode: vertical-rl;">
+      向下滚动
+    </span>
+    <div class="w-px h-8 bg-accent-gold scroll-line"></div>
+  </div>
+</section>
+
+<style>
+  @keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes scrollDown {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(10px); }
+  }
+
+  .slide.active .slide-subtitle { animation: fadeInUp 0.5s ease forwards 0.1s; opacity: 0; }
+  .slide.active .slide-title { animation: fadeInUp 0.5s ease forwards 0.2s; opacity: 0; }
+  .slide.active .slide-description { animation: fadeInUp 0.5s ease forwards 0.3s; opacity: 0; }
+  .slide.active .slide-cta { animation: fadeInUp 0.5s ease forwards 0.4s; opacity: 0; }
+  .scroll-line { animation: scrollDown 1.5s ease-in-out infinite; }
+</style>
+
+<script>
+  const carousel = document.querySelector('.hero-carousel');
+  if (carousel) {
+    const slides = carousel.querySelectorAll('.slide');
+    const indicators = carousel.querySelectorAll('.indicator');
+    const prevBtn = carousel.querySelector('.prev-btn');
+    const nextBtn = carousel.querySelector('.next-btn');
+
+    let currentSlide = 0;
+    let autoplayTimer: number;
+
+    function goToSlide(index: number) {
+      slides.forEach((s) => { s.classList.remove('active', 'opacity-100'); s.classList.add('opacity-0'); });
+      indicators.forEach((i) => { i.classList.remove('bg-accent-gold'); i.classList.add('bg-text-muted/30'); });
+      slides[index].classList.add('active', 'opacity-100');
+      slides[index].classList.remove('opacity-0');
+      indicators[index].classList.add('bg-accent-gold');
+      indicators[index].classList.remove('bg-text-muted/30');
+      currentSlide = index;
+    }
+
+    function nextSlide() { goToSlide((currentSlide + 1) % slides.length); }
+    function prevSlide() { goToSlide((currentSlide - 1 + slides.length) % slides.length); }
+    function startAutoplay() { autoplayTimer = window.setInterval(nextSlide, 6000); }
+    function stopAutoplay() { clearInterval(autoplayTimer); }
+
+    nextBtn?.addEventListener('click', () => { stopAutoplay(); nextSlide(); startAutoplay(); });
+    prevBtn?.addEventListener('click', () => { stopAutoplay(); prevSlide(); startAutoplay(); });
+    indicators.forEach((ind, i) => ind.addEventListener('click', () => { stopAutoplay(); goToSlide(i); startAutoplay(); }));
+
+    goToSlide(0);
+    startAutoplay();
+  }
+</script>

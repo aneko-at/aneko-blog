@@ -1,0 +1,112 @@
+---
+const navLinks = [
+  { href: '/', label: '首页' },
+  { href: '/blog', label: '文章' },
+  { href: '/archive', label: '归档' },
+  { href: '/about', label: '关于' },
+];
+---
+
+<header class="fixed top-0 left-0 right-0 z-50 bg-primary/90 backdrop-blur-sm border-b border-accent-gold/20">
+  <nav class="container mx-auto px-4 py-4 flex items-center justify-between">
+    <!-- Logo -->
+    <a href="/" class="flex items-center logo-link">
+      <span class="logo-text">AT</span>
+      <span class="logo-separator"> | </span>
+      <span class="logo-text logo-text-secondary">Blog</span>
+    </a>
+
+    <!-- Desktop Nav -->
+    <ul class="hidden md:flex items-center space-x-8">
+      {navLinks.map(({ href, label }) => (
+        <li>
+          <a href={href} class="text-sm font-body text-text hover:text-accent-gold transition-colors duration-300 uppercase tracking-wider">
+            {label}
+          </a>
+        </li>
+      ))}
+    </ul>
+
+    <!-- Search + CTA -->
+    <div class="hidden md:flex items-center gap-3">
+      <button
+        data-search-trigger
+        class="flex items-center gap-2 px-3 py-2 text-sm text-text-muted hover:text-accent-gold transition-colors duration-300 cursor-pointer"
+        aria-label="搜索"
+      >
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+        </svg>
+        <kbd class="text-xs text-text-muted/30 border border-text-muted/20 px-1 py-0.5">⌘K</kbd>
+      </button>
+      <a href="/blog" class="btn text-sm">阅读更多</a>
+    </div>
+
+    <!-- Mobile Menu Button -->
+    <button id="mobile-menu-btn" class="md:hidden text-text hover:text-accent-gold transition-colors">
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+      </svg>
+    </button>
+  </nav>
+
+  <!-- Mobile Menu -->
+  <div id="mobile-menu" class="md:hidden hidden bg-primary border-t border-accent-gold/20">
+    <ul class="container mx-auto px-4 py-4 space-y-4">
+      {navLinks.map(({ href, label }) => (
+        <li>
+          <a href={href} class="block text-sm font-body text-text hover:text-accent-gold transition-colors duration-300 uppercase tracking-wider">
+            {label}
+          </a>
+        </li>
+      ))}
+      <li>
+        <button data-search-trigger class="block w-full text-left text-sm font-body text-text hover:text-accent-gold transition-colors duration-300 uppercase tracking-wider">
+          搜索
+        </button>
+      </li>
+      <li>
+        <a href="/blog" class="block btn text-sm text-center">阅读更多</a>
+      </li>
+    </ul>
+  </div>
+</header>
+
+<style>
+  .logo-link {
+    text-decoration: none;
+    transition: opacity 0.3s ease;
+  }
+  .logo-link:hover { opacity: 0.8; }
+
+  .logo-text {
+    font-family: 'Josefin Sans', sans-serif;
+    font-size: 1.5rem;
+    font-weight: 300;
+    color: var(--color-accent-gold);
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+  }
+  .logo-text-secondary {
+    font-weight: 200;
+    color: var(--color-text-muted);
+    font-size: 0.875rem;
+  }
+
+  .logo-separator {
+    font-family: 'Josefin Sans', sans-serif;
+    font-size: 1.5rem;
+    font-weight: 100;
+    color: rgba(192, 160, 98, 0.5);
+    margin: 0 0.4rem;
+  }
+</style>
+
+<script>
+  const menuBtn = document.getElementById('mobile-menu-btn');
+  const mobileMenu = document.getElementById('mobile-menu');
+
+  if (menuBtn && mobileMenu) {
+    menuBtn.addEventListener('click', () => mobileMenu.classList.toggle('hidden'));
+  }
+</script>
