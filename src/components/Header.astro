@@ -55,7 +55,7 @@ const navLinks = [
 <div id="mobile-menu-overlay" class="mobile-menu-overlay md:hidden" aria-hidden="true">
   <div class="mobile-menu-backdrop"></div>
   <div id="mobile-menu" class="mobile-menu bg-primary border-t border-accent-gold/20">
-    <ul class="container mx-auto px-4 py-4 space-y-4">
+    <ul class="container mx-auto px-4 pt-8 pb-12 space-y-5">
       {navLinks.map(({ href, label }, index) => (
         <li class="mobile-menu-item" style={`--item-index: ${index}`}>
           <a href={href} class="block text-sm font-body text-text hover:text-accent-gold transition-colors duration-300 uppercase tracking-wider">
