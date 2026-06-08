@@ -100,7 +100,6 @@
 
   let searchIndex: SearchItem[] = [];
   let selectedIndex = -1;
-  let searchInitialized = false;
 
   async function loadSearchIndex() {
     try {
@@ -112,6 +111,12 @@
   }
 
   function openSearch() {
+    // Close mobile menu if open
+    const mobileMenu = document.getElementById('mobile-menu');
+    if (mobileMenu && !mobileMenu.classList.contains('hidden')) {
+      mobileMenu.classList.add('hidden');
+    }
+
     const dialog = document.getElementById('search-dialog');
     if (!dialog) return;
     dialog.classList.add('active');
@@ -197,10 +202,19 @@
     }
   }
 
-  function initSearch() {
-    if (searchInitialized) return;
-    searchInitialized = true;
+  function bindSearchTriggers() {
+    document.querySelectorAll('[data-search-trigger]').forEach(btn => {
+      // Remove old listeners by cloning
+      const newBtn = btn.cloneNode(true);
+      btn.parentNode?.replaceChild(newBtn, btn);
+      newBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        openSearch();
+      });
+    });
+  }
 
+  function initSearch() {
     loadSearchIndex();
 
     // Cmd/Ctrl + K
@@ -217,14 +231,6 @@
       if (e.key === 'Escape') {
         closeSearch();
       }
-    });
-
-    // Trigger buttons
-    document.querySelectorAll('[data-search-trigger]').forEach(btn => {
-      btn.addEventListener('click', (e) => {
-        e.preventDefault();
-        openSearch();
-      });
     });
 
     // Backdrop click
@@ -249,16 +255,13 @@
         }
       });
     }
+
+    // Bind all triggers
+    bindSearchTriggers();
   }
 
+  // Initialize on first load
   document.addEventListener('DOMContentLoaded', initSearch);
-  document.addEventListener('astro:page-load', () => {
-    // Re-bind trigger buttons after SPA navigation
-    document.querySelectorAll('[data-search-trigger]').forEach(btn => {
-      btn.addEventListener('click', (e) => {
-        e.preventDefault();
-        openSearch();
-      });
-    });
-  });
+  // Re-bind triggers after View Transition navigation
+  document.addEventListener('astro:page-load', bindSearchTriggers);
 </script>
