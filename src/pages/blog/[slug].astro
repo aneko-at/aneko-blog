@@ -84,10 +84,10 @@ const relatedArticles = allPosts
   <!-- Article Content -->
   <section class="py-12 bg-primary">
     <div class="container mx-auto px-4">
-      <div class="max-w-6xl mx-auto flex gap-8">
+      <div class="max-w-6xl mx-auto flex flex-col xl:flex-row gap-8">
         <!-- Main Content -->
-        <article class="flex-1 max-w-3xl">
-          <div class="prose prose-lg max-w-none">
+        <article class="flex-1 min-w-0">
+          <div class="prose prose-lg">
             <Content />
           </div>
         </article>
@@ -358,7 +358,20 @@ const relatedArticles = allPosts
 
   .prose img { max-width: 100%; height: auto; border-radius: 12px; margin: 2rem 0; border: 1px solid rgba(192, 160, 98, 0.15); }
 
-  .prose table { width: 100%; border-collapse: collapse; margin: 2rem 0; font-size: 0.95rem; }
+  .prose table { width: 100%; border-collapse: collapse; margin: 2rem 0; font-size: 0.95rem; overflow-x: auto; display: block; }
+
+  /* Mobile responsive for article content */
+  @media (max-width: 768px) {
+    .prose { font-size: 1rem; }
+    .prose h1 { font-size: 1.75rem; }
+    .prose h2 { font-size: 1.5rem; margin-top: 2rem; }
+    .prose h3 { font-size: 1.25rem; }
+    .prose pre { font-size: 0.85rem; padding: 1rem; margin: 1.5rem -1rem; border-radius: 8px; }
+    .prose blockquote { padding: 1rem; margin: 1.5rem 0; }
+    .prose table { font-size: 0.85rem; }
+    .prose thead th { padding: 0.75rem; font-size: 0.75rem; }
+    .prose tbody td { padding: 0.625rem 0.75rem; }
+  }
   .prose thead th {
     background: rgba(192, 160, 98, 0.1);
     color: var(--color-accent-gold);
