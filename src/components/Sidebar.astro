@@ -8,7 +8,7 @@ const latestPosts = sortedPosts.slice(0, 5);
 
 // Tags
 const tagMap = new Map<string, number>();
-for (const post of allPosts) {
+for (const post of sortedPosts) {
   for (const tag of post.data.tags) {
     tagMap.set(tag, (tagMap.get(tag) || 0) + 1);
   }
