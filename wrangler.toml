@@ -1,9 +1,5 @@
 name = "at-astroblog"
-main = "src/index.ts"
 compatibility_date = "2024-01-01"
 
 [assets]
 bucket = "./dist"
-
-[vars]
-ENVIRONMENT = "production"
