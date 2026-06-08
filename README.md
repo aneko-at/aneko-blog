@@ -51,17 +51,29 @@ npm run preview
 ## 项目结构
 
 ```
+blog/
 ├── src/
-│   ├── components/     # 可复用组件
-│   ├── content/blog/   # 博客文章（Markdown）
-│   ├── layouts/        # 布局组件
-│   ├── pages/          # 页面路由
-│   ├── plugins/        # Markdown 插件
-│   ├── styles/         # 全局样式
-│   └── utils/          # 工具函数
-├── public/             # 静态资源
-├── tailwind.config.js  # Tailwind 配置
-└── astro.config.mjs    # Astro 配置
+│   ├── components/          # 可复用组件
+│   │   ├── ArticleCard.astro
+│   │   ├── Footer.astro
+│   │   ├── Header.astro
+│   │   ├── HeroCarousel.astro
+│   │   ├── Pagination.astro
+│   │   ├── SearchDialog.astro
+│   │   ├── Sidebar.astro
+│   │   └── TOC.astro
+│   ├── content/blog/        # 博客文章（Markdown）
+│   ├── layouts/             # 布局组件
+│   ├── pages/               # 页面路由
+│   ├── plugins/             # Markdown 插件（GitHub 卡片）
+│   ├── styles/              # 全局样式
+│   ├── utils/               # 工具函数
+│   └── content.config.ts    # 内容配置
+├── public/                  # 静态资源
+├── tailwind.config.js       # Tailwind 配置
+├── astro.config.mjs         # Astro 配置
+├── tsconfig.json            # TypeScript 配置
+└── wrangler.toml            # Cloudflare Pages 部署配置
 ```
 
 ## 自定义站点
@@ -125,8 +137,22 @@ fontFamily: {
 ### 5. 静态资源
 
 - `public/` - 存放图片、图标等静态资源
-- `public/favicon.svg` - 网站图标
+- `public/favicon.ico` - 网站图标
+- `public/favicon.jpg` - 网站图标（备用）
 - `public/images/` - 图片资源
+- `public/animations.js` - 动画脚本
+
+## 部署
+
+项目支持部署到 Cloudflare Pages：
+
+```bash
+# 构建
+npm run build
+
+# 部署到 Cloudflare Pages
+npx wrangler pages deploy dist
+```
 
 ## 许可证
 
