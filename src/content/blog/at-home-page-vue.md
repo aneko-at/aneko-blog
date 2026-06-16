@@ -1,9 +1,9 @@
 ---
-title: "开源 ATBSPB-个人主页"
+title: "开源 aneko-个人主页"
 description: "At - Home Page - Vue | 基于 zyyo 主页，使用 Vue 3 + Vite 重构的个人主页项目，支持 Light/Dark 双主题切换"
 pubDate: 2026-05-15
 tags: ["Vue/Vite", "个人主页", "开源"]
-author: "ATBSPB"
+author: "aneko"
 ---
 
 ## 写在前面
@@ -14,7 +14,7 @@ author: "ATBSPB"
 
 **At - Home Page - Vue** 就这么来的。
 
-::github{repo="ATBSPB/at-home-page-vue"}
+::github{repo="aneko/at-home-page-vue"}
 
 ## 技术选型
 
@@ -136,7 +136,7 @@ function toggleTheme() {
 
 ```bash
 # 克隆项目
-git clone https://github.com/ATBSPB/at-home-page-vue.git
+git clone https://github.com/aneko/at-home-page-vue.git
 
 # 安装依赖
 npm install
@@ -165,4 +165,4 @@ npx wrangler pages deploy dist
 
 **协议：** MIT License
 
-**地址：** [ATBSPB/at-home-page-vue](https://github.com/ATBSPB/at-home-page-vue)
+**地址：** [aneko/at-home-page-vue](https://github.com/aneko/at-home-page-vue)
