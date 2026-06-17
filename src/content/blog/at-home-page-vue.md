@@ -14,7 +14,7 @@ author: "aneko"
 
 **At - Home Page - Vue** 就这么来的。
 
-::github{repo="aneko-at/aneko-homepage"}
+::github{repo="At-aneko/aneko-homepage"}
 
 ## 技术选型
 
