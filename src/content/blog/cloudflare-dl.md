@@ -3,7 +3,7 @@ title: "Cloudflare 免费代理搭建教程"
 description: "永久可用+免费域名｜10分钟搭建｜详细教程"
 pubDate: 2026-05-01
 tags: ["Cloudflare", "代理", "开源"]
-author: "aneko"
+author: "Aneko"
 ---
 
 ## Cloudflare 免费代理搭建教程

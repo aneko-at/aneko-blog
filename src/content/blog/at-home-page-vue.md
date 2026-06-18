@@ -1,9 +1,9 @@
 ---
-title: "开源 aneko-个人主页"
+title: "开源 Aneko-个人主页"
 description: "At - Home Page - Vue | 基于 zyyo 主页，使用 Vue 3 + Vite 重构的个人主页项目，支持 Light/Dark 双主题切换"
 pubDate: 2026-05-15
 tags: ["Vue/Vite", "个人主页", "开源"]
-author: "aneko"
+author: "Aneko"
 ---
 
 ## 写在前面

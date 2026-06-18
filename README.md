@@ -1,4 +1,4 @@
-# aneko Blog
+# Aneko Blog
 
 一个使用 Astro 构建的个人博客，采用 Tailwind CSS 进行样式设计。
 

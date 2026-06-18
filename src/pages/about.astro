@@ -5,7 +5,7 @@ import Footer from '../components/Footer.astro';
 import GithubCard from '../components/GithubCard.astro';
 ---
 
-<BaseLayout title="关于 - aneko">
+<BaseLayout title="关于 - Aneko">
   <Header />
 
   <!-- Page Header -->
@@ -25,22 +25,37 @@ import GithubCard from '../components/GithubCard.astro';
       <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
         <div class="reveal-left">
         <h2 class="section-title">简介</h2>
-        <p class="section-subtitle">about</p>
           <div class="divider-animated mb-8"></div>
           <p class="text-text-muted leading-relaxed mb-6">
-            这是 aneko 的个人博客站点。
+            这是 Aneko 的个人博客站点。
           </p>
           <div class="mb-6">
             <GithubCard repo="At-aneko/aneko-blog" />
           </div>
-          <p class="text-text-muted leading-relaxed mb-4">
-            <span class="font-semibold text-text">aneko 个人主页：</span>
-            <a href="https://www.aneko.ink" target="_blank" rel="noopener noreferrer" class="text-accent-gold hover:underline">Aneko HomePage</a>
-          </p>
-          <p class="text-text-muted leading-relaxed">
-            <span class="font-semibold text-text">本网站所用图片来源：</span>
-            <a href="https://photo.aneko.ink" target="_blank" rel="noopener noreferrer" class="text-accent-gold hover:underline">Aneko - Photo</a>
-          </p>
+          <div class="flex flex-col gap-4">
+            <a href="https://www.aneko.ink" target="_blank" rel="noopener noreferrer" class="github-card" style="margin: 0;">
+              <div class="github-card-header">
+                <svg class="github-card-icon" viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
+                  <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/>
+                </svg>
+                <span class="github-card-repo">Aneko HomePage</span>
+              </div>
+              <div class="github-card-body">
+                <p class="github-card-description">Aneko 个人主页</p>
+              </div>
+            </a>
+            <a href="https://photo.aneko.ink" target="_blank" rel="noopener noreferrer" class="github-card" style="margin: 0;">
+              <div class="github-card-header">
+                <svg class="github-card-icon" viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
+                  <path d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z"/>
+                </svg>
+                <span class="github-card-repo">Aneko Photo</span>
+              </div>
+              <div class="github-card-body">
+                <p class="github-card-description">本网站所用图片来源</p>
+              </div>
+            </a>
+          </div>
         </div>
 
         <div class="reveal-right reveal-delay-2">
@@ -50,7 +65,7 @@ import GithubCard from '../components/GithubCard.astro';
             <div class="img-hover-zoom">
               <img
                 src="/images/A2.jpg"
-                alt="aneko"
+                alt="Aneko"
                 class="w-full h-auto object-cover"
                 loading="lazy"
               />
