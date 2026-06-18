@@ -2,7 +2,7 @@
 
 一个使用 Astro 构建的个人博客，采用 Tailwind CSS 进行样式设计。
 
-**演示站点：** [blog.atbspb.online](https://blog.atbspb.online)
+**演示站点：** [blog.aneko.ink](https://blog.aneko.ink)
 
 ## 功能特点
 
