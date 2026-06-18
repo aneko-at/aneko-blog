@@ -117,8 +117,10 @@ const slides: Slide[] = [
 </style>
 
 <script>
-  const carousel = document.querySelector('.hero-carousel');
-  if (carousel) {
+  function initCarousel() {
+    const carousel = document.querySelector('.hero-carousel');
+    if (!carousel) return;
+
     const slides = carousel.querySelectorAll('.slide');
     const indicators = carousel.querySelectorAll('.indicator');
     const prevBtn = carousel.querySelector('.prev-btn');
@@ -149,4 +151,6 @@ const slides: Slide[] = [
     goToSlide(0);
     startAutoplay();
   }
+
+  document.addEventListener('astro:page-load', initCarousel);
 </script>
