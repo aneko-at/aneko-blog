@@ -29,6 +29,9 @@ import GithubCard from '../components/GithubCard.astro';
             基于 Astro 构建的个人博客，使用 Tailwind CSS 样式框架，支持 GitHub 卡片嵌入、文章搜索、目录导航等功能
           </p>
           <div class="mb-6">
+            <GithubCard repo="At-aneko/aneko-blog" />
+          </div>
+          <div class="mb-6">
             <h3 class="text-lg font-heading font-semibold text-text mb-3">功能特点</h3>
             <ul class="text-text-muted space-y-1 text-sm">
               <li>- 响应式设计，支持移动端和桌面端</li>
@@ -49,9 +52,6 @@ import GithubCard from '../components/GithubCard.astro';
               <li>- <strong class="text-text">样式</strong>: Tailwind CSS</li>
               <li>- <strong class="text-text">包管理</strong>: npm</li>
             </ul>
-          </div>
-          <div class="mb-6">
-            <GithubCard repo="At-aneko/aneko-blog" />
           </div>
           <div class="flex flex-col gap-3">
             <p class="text-text-muted">
