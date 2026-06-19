@@ -1,6 +1,6 @@
 # Aneko Blog
 
-一个使用 Astro 构建的个人博客，采用 Tailwind CSS 进行样式设计。
+基于 Astro 构建的个人博客，使用 Tailwind CSS 样式框架，支持 GitHub 卡片嵌入、文章搜索、目录导航等功能
 
 **演示站点：** [blog.aneko.ink](https://blog.aneko.ink)
 
